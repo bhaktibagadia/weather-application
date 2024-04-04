@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_app/services/weather_service.dart';
 
 import '../models/weather_model.dart';
@@ -19,18 +20,27 @@ class _WeatherPageState extends State<WeatherPage> {
   _fetchWeather() async {
     String cityName = await _weatherService.getCurrentCity();
 
+    // try {
+    //   final weather = await _weatherService.getWeather(cityName);
+    //   setState(() {
+    //     _weather = weather;
+    //   });
+    // }
     try {
       final weather = await _weatherService.getWeather(cityName);
       setState(() {
         _weather = weather;
       });
-    }
-
-    //any errors
-    catch (e) {
-      print(e);
+    } catch (e) {
+      print("Error fetching weather: $e");
+      // Handle the error gracefully, e.g., show an error message to the user
     }
   }
+  //any errors
+  //   catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   //weather animations
 
@@ -43,9 +53,16 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+        body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(_weather?.cityName ?? "loading city name.."),
+          Lottie.asset('assets/cloudy.json.json'),
+          Text('${_weather?.temperature.round()}°C')
+        ],
+      ),
+    ));
   }
 }
-
-
-// 7:25
